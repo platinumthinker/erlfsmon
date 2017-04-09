@@ -1,15 +1,14 @@
 -module(inotifywait).
--export([find_executable/0, start_port/2, known_events/0, line_to_event/1]).
+-export([find_executable/0, start_port/1, known_events/0, line_to_event/1]).
 
 find_executable() ->
     os:find_executable("inotifywait").
 
-start_port(Path, Cwd) ->
-    Path1 = filename:absname(Path),
-    Args = [find_executable(), "-m", "-e", "close_write", "-e", "moved_to", "-e", "create", "-r", Path1],
+start_port(Path) ->
+    Args = [find_executable(), "-m", "-e", "close_write", "-e", "moved_to", "-e", "create", "-r" | Path],
 
     erlang:open_port({spawn_executable, erlsh:fdlink_executable()},
-        [stream, exit_status, {line, 16384}, {args, Args}, {cd, Cwd}]).
+        [stream, exit_status, {line, 16384}, {args, Args}]).
 
 known_events() ->
     %[renamed, closed, modified, isdir, created, undefined].

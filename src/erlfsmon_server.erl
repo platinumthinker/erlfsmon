@@ -39,7 +39,7 @@ init([Backend]) ->
 
 handle_call({subscribe, Path, FileFilter, KnownEvents}, {Pid, _},
             #state{backend = Backend, subscribers = Subs} = State) ->
-    Port = Backend:start_port(Path, string:join(Path, " ")),
+    Port = Backend:start_port(Path),
     erlang:monitor(process, Pid),
     {reply, Port, State#state{
         subscribers = Subs#{Port => #subscribe{

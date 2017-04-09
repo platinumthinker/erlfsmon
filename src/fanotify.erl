@@ -1,12 +1,12 @@
 -module(fanotify).
--export([find_executable/0, start_port/2, known_events/0, line_to_event/1]).
+-export([find_executable/0, start_port/1, known_events/0, line_to_event/1]).
 
 find_executable() ->
     os:find_executable("fanotify_watch").
 
-start_port(_Path, Cwd) ->
+start_port(Path) ->
     erlang:open_port({spawn_executable, find_executable()},
-        [stream, exit_status, {line, 16384}, {args, ["-c"]}, {cd, Cwd}]).
+        [stream, exit_status, {line, 16384}, {args, ["-c"]}, {cd, Path}]).
 
 known_events() ->
     [closed, modified, isdir, undefined].
