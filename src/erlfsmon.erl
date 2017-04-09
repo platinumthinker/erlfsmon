@@ -10,16 +10,16 @@
 -type filter() :: fun((Filename :: string()) -> boolean()).
 -type known_events() :: [atom()].
 
--spec subscribe(Path :: string()) -> Ref :: any().
+-spec subscribe(Paths :: [string()]) -> Ref :: any().
 subscribe(Path) ->
     subscribe(Path, fun(_) -> true end).
 
--spec subscribe(Path :: string(), filter()) -> Ref :: any().
+-spec subscribe(Paths :: [string()], filter()) -> Ref :: any().
 subscribe(Path, Filter) ->
     KnownEvents = known_events(),
     gen_server:call(erlfsmon, {subscribe, Path, Filter, KnownEvents}).
 
--spec subscribe(Path :: string(), filter(), known_events()) -> Ref :: any().
+-spec subscribe(Path :: [string()], filter(), known_events()) -> Ref :: any().
 subscribe(Path, Filter, KnownEvents) ->
     gen_server:call(erlfsmon, {subscribe, Path, Filter, KnownEvents}).
 
